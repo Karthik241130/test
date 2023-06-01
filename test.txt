@@ -1,0 +1,261 @@
+import React, { useState , useEffect } from 'react';
+
+import AddModal from './add-modal';
+
+import ClinetIcon from '../../../static/images/svg/client-icon.svg';
+
+ 
+
+import PracticesIcon from '../../../static/images/svg/practices-icon.svg';
+
+import DepartmentIcon from '../../../static/images/svg/departments-icon.svg';
+
+import JobTitleIcon from '../../../static/images/svg/job-title-icon.svg';
+
+import PracticeDetails from './organisation_dictionary/PracticeDetails';
+
+import DepartmentDetails from './organisation_dictionary/departmentDetails';
+
+import JobTitlesDetails from './organisation_dictionary/JobTitlesDetails';
+
+import ClinetDetails from './organisation_dictionary/clinetDetails';
+
+import OrganizationDictionary from '../../../api/organization-dictionary';
+
+
+
+
+
+const OrganizationDictinory = () => {
+
+ 
+
+  const [activeTab, setActiveTab] = useState("clientTab");
+
+  const [practicesAll, setPracticesAll] = useState([]);
+
+  const [practiceCount , setPracticesCount] = useState(0);
+
+  const [clients, setClients] = useState([]);
+
+  const [clientCount , setClientCount] = useState(0);
+
+  const [JobTitles, setJobTitles] = useState([]);
+
+  const [jobTitleCount , setJobTitleCount] = useState(0);
+
+  const [departments, setDepartments] = useState([]);
+
+  const [departmentCount , setDepartmentCount] = useState(0);
+
+
+
+
+
+
+
+  useEffect(() => {
+
+    allPractices();
+
+    allClients();
+
+    allJobTitles();
+
+    allDepartments();
+
+  }, []);
+
+ 
+
+  const allPractices = () => {
+
+    OrganizationDictionary.getPractices().then((res) => {
+
+      setPracticesAll(res?.data);
+
+      setPracticesCount(res?.data?.length)
+
+    });
+
+  };
+
+ 
+
+  const allClients = () => {
+
+    OrganizationDictionary.getClients().then((res) => {
+
+     
+
+      setClients(res);
+
+      setClientCount(res?.length);
+
+    });
+
+  };
+
+ 
+
+  const allJobTitles = () => {
+
+    OrganizationDictionary.getJobTitles().then((res) => {
+
+     
+
+      setJobTitles(res);
+
+      setJobTitleCount(res?.length);
+
+    });
+
+  };
+
+ 
+
+  const allDepartments = () => {
+
+    OrganizationDictionary.getDepartments().then((res) => {
+
+     
+
+      setDepartments(res);
+
+      setDepartmentCount(res?.length);
+
+    });
+
+  };
+
+ 
+
+ 
+
+  return (
+
+    <div className="OrganizationDictinory-wrapper">
+
+      <div className="heading-wrapper">
+
+        <h5 className="title">Organization Dictinory</h5>
+
+      </div>
+
+      <div className="tabs-wrapper">
+
+        <ul className="tabs-list nav nav-tabs">
+
+          <li className="tile-item tile-client" onClick={() => setActiveTab('clientTab')}>
+
+            <div className="tile-details">
+
+              <p className="title">Clients</p>
+
+              <p className="count">{clientCount}</p>
+
+            </div>
+
+            <div className="img-wrapper">
+
+              <img src={ClinetIcon} alt='' className='img-fluid'/>
+
+            </div>
+
+          </li>
+
+          <li className="tile-item tile-department" onClick={() => setActiveTab('departmentTab')}>
+
+            <div className="tile-details">
+
+              <p className="title">departments</p>
+
+              <p className="count">{departmentCount}</p>
+
+            </div>
+
+            <div className="img-wrapper">
+
+              <img src={DepartmentIcon} alt='' className='img-fluid'/>
+
+            </div>
+
+          </li>
+
+          <li className="tile-item tile-practices" onClick={() => setActiveTab('practiceTab')}>
+
+            <div className="tile-details">
+
+              <p className="title">practices</p>
+
+              <p className="count">{practiceCount}</p>
+
+            </div>
+
+            <div className="img-wrapper">
+
+              <img src={PracticesIcon} alt='' className='img-fluid'/>
+
+            </div>
+
+          </li>
+
+          <li className="tile-item tile-job-titles" onClick={() => setActiveTab('jobTitleTab')}>
+
+            <div className="tile-details">
+
+              <p className="title">Job titles</p>
+
+              <p className="count">{jobTitleCount}</p>
+
+            </div>
+
+            <div className="img-wrapper">
+
+              <img src={JobTitleIcon} alt='' className='img-fluid' />
+
+            </div>
+
+          </li>
+
+        </ul>
+
+        <div className="tabs-wrapper">
+
+          {
+
+            (activeTab == 'clientTab') && (<ClinetDetails clients={clients} />)  
+
+          }
+
+         {
+
+          (activeTab=='departmentTab')&&(<DepartmentDetails departments={departments} /> )
+
+          }
+
+          {
+
+            (activeTab=='practiceTab') && (<PracticeDetails practicesAll={practicesAll}/> )
+
+          }
+
+          {
+
+            (activeTab=='jobTitleTab')&&( <JobTitlesDetails JobTitles={JobTitles} />)
+
+          }
+
+        </div>
+
+      </div>
+
+    </div>
+
+  );
+
+};
+
+ 
+
+export default OrganizationDictinory;

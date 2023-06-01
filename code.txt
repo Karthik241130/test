@@ -1,0 +1,35 @@
+import win32com.client
+from datetime import datetime, date
+import re
+name=[]
+outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
+inbox = outlook.GetDefaultFolder(6)
+# print(type(inbox))
+messages = inbox.Items
+str1='WELCOME ON-BOARD'
+# ReceivedTime = date.today()
+# messages.Sort("[ReceivedTime]", True)
+#ReceivedTime = datetime.datetime.today().strftime("%Y-%m-%d")
+for message in messages:
+   # if datetime.strptime(str(message.ReceivedTime).split(" ")[0], '%Y-%m-%d').date() == ReceivedTime:
+      if message.subject.startswith('MOURI Tech - New Joinee Introduction'):
+         content=message.Body
+         lines=content.split("\n")
+         names=""
+         # print(content)
+         for i in lines:
+            if ("WELCOME" in i and "working with Analytics" in content):
+               # print(content)
+               names = i.replace(str1, '')
+            if "working with Analytics" in i:
+               s = i.split(' ', 10)
+               for i in s:
+                  if i.startswith('Ana'):
+                        # print("name : ")
+                        name=i.append(names)
+                        print("name :",name)
+                  #       print("dept : ")
+                  #       print(i)
+                  # if i.startswith('Mr' or 'Ms'):
+                  #       print("MGR name : ")
+                  #       print(i)
